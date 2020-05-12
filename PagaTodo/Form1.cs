@@ -21,12 +21,13 @@ namespace PagaTodo
         public Form1()
         {
             InitializeComponent();
+            //Llenar combobox de entidades
             entidadCmb.DataSource = Enum.GetValues(typeof(Entidad));
+            //llenar combobox de entidades para buscar
             entidadBuscarCmb.DataSource = Enum.GetValues(typeof(Entidad));
             entidadBuscarCmb.SelectedIndex = -1;
             LlenarTabla();
         }
-
 
         private void registrarBtn_Click(object sender, EventArgs e)
         {
@@ -68,9 +69,14 @@ namespace PagaTodo
 
         private void entidadBuscarCmb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (entidadBuscarCmb.Text != "") {
+            
+        }
+
+        public void Consultar()
+        {
+            if (entidadBuscarCmb.Text != "" && fechaPagoPick.Value.Date != null)
+            {
                 string value = entidadBuscarCmb.Text;
-                MessageBox.Show(value);
                 FiltrarTabla((Entidad)Enum.Parse(typeof(Entidad), value));
             }
         }
@@ -112,6 +118,15 @@ namespace PagaTodo
             totalEmduparText.Text = consignacionService.Totalizar(Entidad.Emdupar).ToString();
             totalGascaribeTxt.Text = consignacionService.Totalizar(Entidad.Gascaribe).ToString();
         }
+
+        public void LimpiarCampos()
+        {
+            numeroReciboText.Text = "";
+            valorPagoText.Text = "";
+            entidadCmb.SelectedIndex = -1;
+            fechaPagoPick.Value = DateTime.Now.Date;
+        }
+
 
     }
 }
