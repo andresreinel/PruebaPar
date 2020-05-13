@@ -39,7 +39,7 @@ namespace DAL
 
         public void AsignarRuta(string Entidad, DateTime fecha)
         {
-            string path = Entidad + fecha.ToString("ddMMyyyy") ;
+            string path = Entidad.ToUpper() + fecha.ToString("ddMMyyyy")+".txt" ;
             this.ruta = path;
         }
     }

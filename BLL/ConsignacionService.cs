@@ -92,8 +92,7 @@ namespace BLL
 
         }
 
-
-        public int Totalizar(Entidad entidad)
+        public int TotalizarPorTipo(Entidad entidad)
         {
             return consignacionRepository.TotalizarPorTipo(entidad);
         }
@@ -107,12 +106,46 @@ namespace BLL
                 respuesta.Consignaciones = consignaciones;
                 if (consignaciones.Count == 0)
                 {
-                    respuesta.Mensaje = "No hay consignaciones registradas";
+                    respuesta.Mensaje = $"No hay consignaciones registradas de {entidad}";
                     respuesta.Tipo = TipoMensaje.ADVERTENCIA;
                 }
                 else
                 {
                     respuesta.Mensaje = "Consignaciones consultadas";
+                    respuesta.Tipo = TipoMensaje.INFORMACION;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Tipo = TipoMensaje.ERROR;
+                respuesta.Mensaje = "Erro en datos: " + ex.Message;
+                respuesta.Consignaciones = null;
+            }
+            return respuesta;
+
+        }
+
+        public int TotalizarPorTipoYFecha(Entidad entidad, DateTime fecha)
+        {
+            return consignacionRepository.TotalizarPorTipoYFecha(entidad, fecha);
+        }
+
+        public RespuestaDeConsulta ConsultarPorTipoYFecha(Entidad entidad, DateTime fecha)
+        {
+            RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
+            try
+            {
+                IList<Consignacion> consignaciones = consignacionRepository.ListarPorTipoYFecha(entidad, fecha);
+                respuesta.Consignaciones = consignaciones;
+                if (consignaciones.Count == 0)
+                {
+                    respuesta.Mensaje = $"No hay consignaciones registradas de {entidad} en esta fecha {fecha.ToString("dd/MM/yyyy")}";
+                    respuesta.Tipo = TipoMensaje.ADVERTENCIA;
+                }
+                else
+                {
+                    respuesta.Mensaje = "Consignaciones consultadas con exito";
                     respuesta.Tipo = TipoMensaje.INFORMACION;
                 }
 
@@ -135,6 +168,11 @@ namespace BLL
         public double TotalRecaudadoPorEntidad(Entidad entidad)
         {
             return consignacionRepository.TotalRecaudadoPorEntidad(entidad);
+        }
+
+        public double TotalRecaudadoPorEntidadYFecha(Entidad entidad, DateTime fecha)
+        {
+            return consignacionRepository.TotalRecaudadoPorEntidadEnUnaFecha(entidad, fecha);
         }
     }
 }

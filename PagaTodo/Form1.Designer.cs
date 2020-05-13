@@ -54,6 +54,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.totalEmduparText = new System.Windows.Forms.TextBox();
             this.exportarBtn = new System.Windows.Forms.Button();
+            this.cargarBtn = new System.Windows.Forms.Button();
             this.gbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaConsignaciones)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -159,7 +160,7 @@
             this.tablaConsignaciones.AllowUserToAddRows = false;
             this.tablaConsignaciones.AllowUserToDeleteRows = false;
             this.tablaConsignaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tablaConsignaciones.Location = new System.Drawing.Point(335, 59);
+            this.tablaConsignaciones.Location = new System.Drawing.Point(416, 59);
             this.tablaConsignaciones.Name = "tablaConsignaciones";
             this.tablaConsignaciones.ReadOnly = true;
             this.tablaConsignaciones.Size = new System.Drawing.Size(462, 349);
@@ -167,7 +168,7 @@
             // 
             // consultarBtn
             // 
-            this.consultarBtn.Location = new System.Drawing.Point(722, 16);
+            this.consultarBtn.Location = new System.Drawing.Point(712, 16);
             this.consultarBtn.Name = "consultarBtn";
             this.consultarBtn.Size = new System.Drawing.Size(75, 31);
             this.consultarBtn.TabIndex = 7;
@@ -297,19 +298,30 @@
             // 
             // exportarBtn
             // 
-            this.exportarBtn.Location = new System.Drawing.Point(722, 414);
+            this.exportarBtn.Location = new System.Drawing.Point(803, 16);
             this.exportarBtn.Name = "exportarBtn";
-            this.exportarBtn.Size = new System.Drawing.Size(75, 35);
+            this.exportarBtn.Size = new System.Drawing.Size(75, 31);
             this.exportarBtn.TabIndex = 15;
             this.exportarBtn.Text = "Exportar";
             this.exportarBtn.UseVisualStyleBackColor = true;
             this.exportarBtn.Click += new System.EventHandler(this.exportarBtn_Click);
             // 
+            // cargarBtn
+            // 
+            this.cargarBtn.Location = new System.Drawing.Point(335, 59);
+            this.cargarBtn.Name = "cargarBtn";
+            this.cargarBtn.Size = new System.Drawing.Size(75, 45);
+            this.cargarBtn.TabIndex = 16;
+            this.cargarBtn.Text = "Cargar Todos";
+            this.cargarBtn.UseVisualStyleBackColor = true;
+            this.cargarBtn.Click += new System.EventHandler(this.cargarBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 461);
+            this.ClientSize = new System.Drawing.Size(904, 429);
+            this.Controls.Add(this.cargarBtn);
             this.Controls.Add(this.exportarBtn);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label6);
@@ -320,6 +332,7 @@
             this.Controls.Add(this.tablaConsignaciones);
             this.Controls.Add(this.gbox);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Consignaciones";
             this.gbox.ResumeLayout(false);
             this.gbox.PerformLayout();
@@ -359,6 +372,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox totalEmduparText;
         private System.Windows.Forms.Button exportarBtn;
+        private System.Windows.Forms.Button cargarBtn;
     }
 }
 

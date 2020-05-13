@@ -14,7 +14,7 @@ namespace PagaTodo
 {
     public partial class Form1 : Form
     {
-        public static List<Consignacion> consignaciones = new List<Consignacion>();
+        public List<Consignacion> consignaciones = new List<Consignacion>();
         static Consignacion consignacion;
         static ConsignacionService consignacionService = new ConsignacionService();
         ExportacionService exportacionService = new ExportacionService();
@@ -25,12 +25,13 @@ namespace PagaTodo
             InitializeComponent();
             //Llenar combobox de entidades
             entidadCmb.DataSource = Enum.GetValues(typeof(Entidad));
+            entidadCmb.SelectedIndex = -1;
             //llenar combobox de entidades para buscar
             entidadBuscarCmb.DataSource = Enum.GetValues(typeof(Entidad));
             entidadBuscarCmb.SelectedIndex = -1;
             LlenarTabla();
         }
-
+        
         private void registrarBtn_Click(object sender, EventArgs e)
         {
             Respuesta respuesta = new Respuesta();
@@ -47,6 +48,7 @@ namespace PagaTodo
                 consignacion.FechaDePago = fechaPagoPick.Value.Date;
                 consignacion.ValorPagado = double.Parse(valorPagoText.Text);
                 respuesta = consignacionService.Guardar(consignacion);
+                LimpiarCampos();
             }
             Mensaje(respuesta);
         }
@@ -68,17 +70,27 @@ namespace PagaTodo
                     break;
             }
         }
-        
-        
+                
         public void LlenarTabla()
         {
             RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
-            respuesta = consignacionService.Consultar();
-            tablaConsignaciones.DataSource = respuesta.Consignaciones;
-            totalRecaudadoText.Text = consignacionService.TotalRecaudado().ToString();
-            totalElectricaribeText.Text = consignacionService.Totalizar(Entidad.Electricaribe).ToString();
-            totalEmduparText.Text = consignacionService.Totalizar(Entidad.Emdupar).ToString();
-            totalGascaribeTxt.Text = consignacionService.Totalizar(Entidad.Gascaribe).ToString();
+            try
+            {
+                respuesta = consignacionService.Consultar();
+                tablaConsignaciones.DataSource = respuesta.Consignaciones;
+                totalRecaudadoText.Text = consignacionService.TotalRecaudado().ToString();
+                totalElectricaribeText.Text = consignacionService.TotalizarPorTipo(Entidad.Electricaribe).ToString();
+                totalEmduparText.Text = consignacionService.TotalizarPorTipo(Entidad.Emdupar).ToString();
+                totalGascaribeTxt.Text = consignacionService.TotalizarPorTipo(Entidad.Gascaribe).ToString();
+                Mensaje(respuesta);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Mensaje = "ERROR ::"+ex;
+                respuesta.Tipo = TipoMensaje.ERROR;
+                respuesta.Consignaciones = null;
+                Mensaje(respuesta);
+            }
         }
 
         public void LimpiarCampos()
@@ -92,7 +104,7 @@ namespace PagaTodo
         private void consultarBtn_Click(object sender, EventArgs e)
         {
             RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
-            if (fechaBusquedaPick.Value == null && entidadBuscarCmb.SelectedIndex == -1)
+            if (fechaBusquedaPick.Value == null || entidadBuscarCmb.SelectedIndex == -1)
             {
                 respuesta.Tipo = TipoMensaje.ERROR;
                 respuesta.Mensaje = "Debe seleccionar una entidad y establecer una fecha";
@@ -102,7 +114,7 @@ namespace PagaTodo
             {
                 string value = entidadBuscarCmb.Text;
                 Entidad entidad = ConvertirEntidad(value);
-                respuesta = consignacionService.ConsultarPorTipo(entidad);
+                respuesta = consignacionService.ConsultarPorTipoYFecha(entidad, fechaBusquedaPick.Value.Date);
                 tablaConsignaciones.DataSource = respuesta.Consignaciones;
                 FiltrarTabla(entidad);
             }
@@ -111,8 +123,8 @@ namespace PagaTodo
 
         public void FiltrarTabla(Entidad entidad)
         {
-            string total = consignacionService.Totalizar(entidad).ToString();
-            totalRecaudadoText.Text = consignacionService.TotalRecaudadoPorEntidad(entidad).ToString();
+            string total = consignacionService.TotalizarPorTipoYFecha(entidad, fechaBusquedaPick.Value.Date).ToString();
+            totalRecaudadoText.Text = consignacionService.TotalRecaudadoPorEntidadYFecha(entidad,fechaBusquedaPick.Value.Date).ToString();
             switch (entidad)
             {
                 case Entidad.Electricaribe:
@@ -134,19 +146,76 @@ namespace PagaTodo
         }
 
         private void exportarBtn_Click(object sender, EventArgs e)
+        { 
+            RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
+            if (entidadBuscarCmb.SelectedIndex == -1)
+            {
+                respuesta.Tipo = TipoMensaje.ADVERTENCIA;
+                respuesta.Mensaje = "Debe seleccionar una entidad y establecer una fecha";
+                respuesta.Consignaciones = null;
+                Mensaje(respuesta);
+            }
+            else
+            {
+                string msm = $"Esta seguro de exportar consignaciones de  esta entidad {entidadBuscarCmb.Text} ";
+                DialogResult result = MessageBox.Show(msm,"EXPORTAR",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                if(result == DialogResult.Yes)
+                {
+                    Exportar();
+                }
+            }
+        }
+
+        public void Exportar()
         {
-            exportacion = new Exportacion();
-            exportacion.Entidad = ConvertirEntidad(entidadBuscarCmb.Text);
-            exportacion.CantidadDePagos = 0;
-            exportacion.consignaciones = consignaciones;
-            exportacion.FechaDelReporte = DateTime.Now.Date;
-            string value = entidadBuscarCmb.Text;
-            exportacionService.ExportarConsignacion(exportacion);
+            RespuestaDeConsulta respuestaConsulta = new RespuestaDeConsulta();
+            try
+            {
+                Entidad entidad = ConvertirEntidad(entidadBuscarCmb.Text);
+                respuestaConsulta = consignacionService.ConsultarPorTipo(entidad);
+                if (respuestaConsulta.Consignaciones.Count > 0)
+                {
+                    Respuesta respuesta = new Respuesta();
+                    try
+                    {
+                        this.exportacion = new Exportacion();
+                        this.exportacion.Entidad = ConvertirEntidad(entidadBuscarCmb.Text);
+                        this.exportacion.CantidadDePagos = consignacionService.TotalizarPorTipo(exportacion.Entidad);
+                        this.exportacion.consignaciones = respuestaConsulta.Consignaciones;
+                        this.exportacion.FechaDelReporte = DateTime.Now.Date;
+                        this.exportacion.TotalRecaudado = consignacionService.TotalRecaudadoPorEntidad(exportacion.Entidad);
+                        respuesta = exportacionService.ExportarConsignacion(exportacion);
+                        Mensaje(respuesta);
+                    }
+                    catch (Exception ex)
+                    {
+                        respuesta.Mensaje = "ERROR ::"+ex.Message;
+                        respuesta.Tipo = TipoMensaje.ERROR;
+                        Mensaje(respuesta);
+                    }
+                }
+                else
+                {
+                    Mensaje(respuestaConsulta);
+                }
+            }
+            catch (Exception ex)
+            {
+                respuestaConsulta.Mensaje = "ERROR :: "+ex.Message;
+                respuestaConsulta.Consignaciones = null;
+                respuestaConsulta.Tipo = TipoMensaje.ERROR;
+                Mensaje(respuestaConsulta);
+            }
         }
 
         public Entidad ConvertirEntidad(string value)
         {
             return (Entidad)Enum.Parse(typeof(Entidad), value);
+        }
+
+        private void cargarBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

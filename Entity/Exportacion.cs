@@ -12,6 +12,6 @@ namespace Entity
         public DateTime FechaDelReporte { get; set; }
         public double TotalRecaudado {get; set;}
         public int CantidadDePagos { get; set; }
-        public List<Consignacion> consignaciones { get; set; }
+        public IList<Consignacion> consignaciones { get; set; }
     }
 }

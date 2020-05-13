@@ -87,6 +87,16 @@ namespace DAL
             return this.consignaciones.Where(c => c.EntidadDeServicios == tipo).ToList();
         }
 
+        public int TotalizarPorTipoYFecha(Entidad tipo, DateTime fecha)
+        {
+            return this.consignaciones.Where(c => c.EntidadDeServicios == tipo && c.FechaDePago == fecha).Count();
+        }
+
+        public IList<Consignacion> ListarPorTipoYFecha(Entidad tipo, DateTime fecha)
+        {
+            return this.consignaciones.Where(c => c.EntidadDeServicios == tipo && c.FechaDePago == fecha).ToList();
+        }
+
         public double TotalRecaudado()
         {
             double total = 0;
@@ -110,5 +120,17 @@ namespace DAL
             return total;
         }
 
+        public double TotalRecaudadoPorEntidadEnUnaFecha(Entidad entidad, DateTime fecha)
+        {
+            double total = 0;
+            foreach (var element in this.consignaciones)
+            {
+                if (element.EntidadDeServicios == entidad && element.FechaDePago == fecha)
+                {
+                    total += element.ValorPagado;
+                }
+            }
+            return total;
+        }
     }
 }
