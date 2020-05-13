@@ -40,19 +40,19 @@
             this.entidadCmb = new System.Windows.Forms.ComboBox();
             this.tablaConsignaciones = new System.Windows.Forms.DataGridView();
             this.consultarBtn = new System.Windows.Forms.Button();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.fechaBusquedaPick = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.entidadBuscarCmb = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.totalRecaudadoText = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.totalEmduparText = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.totalGascaribeTxt = new System.Windows.Forms.TextBox();
             this.Electricaribelbl = new System.Windows.Forms.Label();
             this.totalElectricaribeText = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.totalGascaribeTxt = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.totalEmduparText = new System.Windows.Forms.TextBox();
             this.gbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaConsignaciones)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -172,14 +172,15 @@
             this.consultarBtn.TabIndex = 7;
             this.consultarBtn.Text = "Consultar";
             this.consultarBtn.UseVisualStyleBackColor = true;
+            this.consultarBtn.Click += new System.EventHandler(this.consultarBtn_Click);
             // 
-            // dateTimePicker1
+            // fechaBusquedaPick
             // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(387, 22);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(99, 20);
-            this.dateTimePicker1.TabIndex = 8;
+            this.fechaBusquedaPick.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.fechaBusquedaPick.Location = new System.Drawing.Point(387, 22);
+            this.fechaBusquedaPick.Name = "fechaBusquedaPick";
+            this.fechaBusquedaPick.Size = new System.Drawing.Size(99, 20);
+            this.fechaBusquedaPick.TabIndex = 8;
             // 
             // label5
             // 
@@ -207,7 +208,6 @@
             this.entidadBuscarCmb.Name = "entidadBuscarCmb";
             this.entidadBuscarCmb.Size = new System.Drawing.Size(121, 21);
             this.entidadBuscarCmb.TabIndex = 10;
-            this.entidadBuscarCmb.SelectedIndexChanged += new System.EventHandler(this.entidadBuscarCmb_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -243,22 +243,22 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Totalización";
             // 
-            // label8
+            // Electricaribelbl
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(66, 85);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(55, 13);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "Emdupar :";
+            this.Electricaribelbl.AutoSize = true;
+            this.Electricaribelbl.Location = new System.Drawing.Point(50, 24);
+            this.Electricaribelbl.Name = "Electricaribelbl";
+            this.Electricaribelbl.Size = new System.Drawing.Size(71, 13);
+            this.Electricaribelbl.TabIndex = 18;
+            this.Electricaribelbl.Text = "Electricaribe :";
             // 
-            // totalEmduparText
+            // totalElectricaribeText
             // 
-            this.totalEmduparText.Enabled = false;
-            this.totalEmduparText.Location = new System.Drawing.Point(134, 82);
-            this.totalEmduparText.Name = "totalEmduparText";
-            this.totalEmduparText.Size = new System.Drawing.Size(156, 20);
-            this.totalEmduparText.TabIndex = 15;
+            this.totalElectricaribeText.Enabled = false;
+            this.totalElectricaribeText.Location = new System.Drawing.Point(134, 21);
+            this.totalElectricaribeText.Name = "totalElectricaribeText";
+            this.totalElectricaribeText.Size = new System.Drawing.Size(156, 20);
+            this.totalElectricaribeText.TabIndex = 19;
             // 
             // label9
             // 
@@ -277,22 +277,22 @@
             this.totalGascaribeTxt.Size = new System.Drawing.Size(156, 20);
             this.totalGascaribeTxt.TabIndex = 17;
             // 
-            // Electricaribelbl
+            // label8
             // 
-            this.Electricaribelbl.AutoSize = true;
-            this.Electricaribelbl.Location = new System.Drawing.Point(50, 24);
-            this.Electricaribelbl.Name = "Electricaribelbl";
-            this.Electricaribelbl.Size = new System.Drawing.Size(71, 13);
-            this.Electricaribelbl.TabIndex = 18;
-            this.Electricaribelbl.Text = "Electricaribe :";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(66, 85);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(55, 13);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "Emdupar :";
             // 
-            // totalElectricaribeText
+            // totalEmduparText
             // 
-            this.totalElectricaribeText.Enabled = false;
-            this.totalElectricaribeText.Location = new System.Drawing.Point(134, 21);
-            this.totalElectricaribeText.Name = "totalElectricaribeText";
-            this.totalElectricaribeText.Size = new System.Drawing.Size(156, 20);
-            this.totalElectricaribeText.TabIndex = 19;
+            this.totalEmduparText.Enabled = false;
+            this.totalEmduparText.Location = new System.Drawing.Point(134, 82);
+            this.totalEmduparText.Name = "totalEmduparText";
+            this.totalEmduparText.Size = new System.Drawing.Size(156, 20);
+            this.totalEmduparText.TabIndex = 15;
             // 
             // Form1
             // 
@@ -303,7 +303,7 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.entidadBuscarCmb);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.fechaBusquedaPick);
             this.Controls.Add(this.consultarBtn);
             this.Controls.Add(this.tablaConsignaciones);
             this.Controls.Add(this.gbox);
@@ -333,7 +333,7 @@
         private System.Windows.Forms.ComboBox entidadCmb;
         private System.Windows.Forms.DataGridView tablaConsignaciones;
         private System.Windows.Forms.Button consultarBtn;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker fechaBusquedaPick;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox entidadBuscarCmb;

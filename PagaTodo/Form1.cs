@@ -66,26 +66,49 @@ namespace PagaTodo
                     break;
             }
         }
-
-        private void entidadBuscarCmb_SelectedIndexChanged(object sender, EventArgs e)
+        
+        
+        public void LlenarTabla()
         {
-            
+            RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
+            respuesta = consignacionService.Consultar();
+            tablaConsignaciones.DataSource = respuesta.Consignaciones;
+            totalRecaudadoText.Text = consignacionService.TotalRecaudado().ToString();
+            totalElectricaribeText.Text = consignacionService.Totalizar(Entidad.Electricaribe).ToString();
+            totalEmduparText.Text = consignacionService.Totalizar(Entidad.Emdupar).ToString();
+            totalGascaribeTxt.Text = consignacionService.Totalizar(Entidad.Gascaribe).ToString();
         }
 
-        public void Consultar()
+        public void LimpiarCampos()
         {
-            if (entidadBuscarCmb.Text != "" && fechaPagoPick.Value.Date != null)
+            numeroReciboText.Text = "";
+            valorPagoText.Text = "";
+            entidadCmb.SelectedIndex = -1;
+            fechaPagoPick.Value = DateTime.Now.Date;
+        }
+
+        private void consultarBtn_Click(object sender, EventArgs e)
+        {
+            RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
+            if (fechaBusquedaPick.Value == null && entidadBuscarCmb.SelectedIndex == -1)
+            {
+                respuesta.Tipo = TipoMensaje.ERROR;
+                respuesta.Mensaje = "Debe seleccionar una entidad y establecer una fecha";
+                respuesta.Consignaciones = null;
+            }
+            else
             {
                 string value = entidadBuscarCmb.Text;
-                FiltrarTabla((Entidad)Enum.Parse(typeof(Entidad), value));
+                Entidad entidad = (Entidad)Enum.Parse(typeof(Entidad), value);
+                respuesta = consignacionService.ConsultarPorTipo(entidad);
+                tablaConsignaciones.DataSource = respuesta.Consignaciones;
+                FiltrarTabla(entidad);
             }
+            Mensaje(respuesta);
         }
 
         public void FiltrarTabla(Entidad entidad)
         {
-            RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
-            respuesta = consignacionService.ConsultarPorTipo(entidad);
-            tablaConsignaciones.DataSource = respuesta.Consignaciones;
             string total = consignacionService.Totalizar(entidad).ToString();
             totalRecaudadoText.Text = consignacionService.TotalRecaudadoPorEntidad(entidad).ToString();
             switch (entidad)
@@ -107,26 +130,5 @@ namespace PagaTodo
                     break;
             }
         }
-
-        public void LlenarTabla()
-        {
-            RespuestaDeConsulta respuesta = new RespuestaDeConsulta();
-            respuesta = consignacionService.Consultar();
-            tablaConsignaciones.DataSource = respuesta.Consignaciones;
-            totalRecaudadoText.Text = consignacionService.TotalRecaudado().ToString();
-            totalElectricaribeText.Text = consignacionService.Totalizar(Entidad.Electricaribe).ToString();
-            totalEmduparText.Text = consignacionService.Totalizar(Entidad.Emdupar).ToString();
-            totalGascaribeTxt.Text = consignacionService.Totalizar(Entidad.Gascaribe).ToString();
-        }
-
-        public void LimpiarCampos()
-        {
-            numeroReciboText.Text = "";
-            valorPagoText.Text = "";
-            entidadCmb.SelectedIndex = -1;
-            fechaPagoPick.Value = DateTime.Now.Date;
-        }
-
-
     }
 }
