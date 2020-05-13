@@ -17,6 +17,8 @@ namespace PagaTodo
         public static List<Consignacion> consignaciones = new List<Consignacion>();
         static Consignacion consignacion;
         static ConsignacionService consignacionService = new ConsignacionService();
+        ExportacionService exportacionService = new ExportacionService();
+        Exportacion exportacion;
 
         public Form1()
         {
@@ -41,7 +43,7 @@ namespace PagaTodo
             {
                 consignacion = new Consignacion();
                 consignacion.NumeroDeRecibo = Convert.ToInt32( numeroReciboText.Text);
-                consignacion.EntidadDeServicios = (Entidad)Enum.Parse(typeof(Entidad), entidadCmb.Text);
+                consignacion.EntidadDeServicios = ConvertirEntidad(entidadCmb.Text);
                 consignacion.FechaDePago = fechaPagoPick.Value.Date;
                 consignacion.ValorPagado = double.Parse(valorPagoText.Text);
                 respuesta = consignacionService.Guardar(consignacion);
@@ -99,7 +101,7 @@ namespace PagaTodo
             else
             {
                 string value = entidadBuscarCmb.Text;
-                Entidad entidad = (Entidad)Enum.Parse(typeof(Entidad), value);
+                Entidad entidad = ConvertirEntidad(value);
                 respuesta = consignacionService.ConsultarPorTipo(entidad);
                 tablaConsignaciones.DataSource = respuesta.Consignaciones;
                 FiltrarTabla(entidad);
@@ -129,6 +131,22 @@ namespace PagaTodo
                     totalElectricaribeText.Text = "0";
                     break;
             }
+        }
+
+        private void exportarBtn_Click(object sender, EventArgs e)
+        {
+            exportacion = new Exportacion();
+            exportacion.Entidad = ConvertirEntidad(entidadBuscarCmb.Text);
+            exportacion.CantidadDePagos = 0;
+            exportacion.consignaciones = consignaciones;
+            exportacion.FechaDelReporte = DateTime.Now.Date;
+            string value = entidadBuscarCmb.Text;
+            exportacionService.ExportarConsignacion(exportacion);
+        }
+
+        public Entidad ConvertirEntidad(string value)
+        {
+            return (Entidad)Enum.Parse(typeof(Entidad), value);
         }
     }
 }

@@ -53,6 +53,7 @@
             this.totalGascaribeTxt = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.totalEmduparText = new System.Windows.Forms.TextBox();
+            this.exportarBtn = new System.Windows.Forms.Button();
             this.gbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaConsignaciones)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -294,11 +295,22 @@
             this.totalEmduparText.Size = new System.Drawing.Size(156, 20);
             this.totalEmduparText.TabIndex = 15;
             // 
+            // exportarBtn
+            // 
+            this.exportarBtn.Location = new System.Drawing.Point(722, 414);
+            this.exportarBtn.Name = "exportarBtn";
+            this.exportarBtn.Size = new System.Drawing.Size(75, 35);
+            this.exportarBtn.TabIndex = 15;
+            this.exportarBtn.Text = "Exportar";
+            this.exportarBtn.UseVisualStyleBackColor = true;
+            this.exportarBtn.Click += new System.EventHandler(this.exportarBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(812, 427);
+            this.ClientSize = new System.Drawing.Size(832, 461);
+            this.Controls.Add(this.exportarBtn);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.entidadBuscarCmb);
@@ -346,6 +358,7 @@
         private System.Windows.Forms.TextBox totalGascaribeTxt;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox totalEmduparText;
+        private System.Windows.Forms.Button exportarBtn;
     }
 }
 
